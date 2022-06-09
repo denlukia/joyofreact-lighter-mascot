@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      :root,
+      body {
+        height: 100%;
+        margin: 0;
+      }
+      body {
+        background-color: #111;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .lil-planet {
+        position: relative;
+        width: 100%;
+        max-width: 600px;
+      }
+
+      .mask,
+      .light {
+        width: 100%;
+        pointer-events: none;
+      }
+      .mask {
+        /* can't be static to be above buttons with glow,
+              but also must prevent parent from shrinking */
+        position: relative;
+      }
+      .light {
+        left: 0;
+        top: 0;
+        position: absolute;
+        mix-blend-mode: lighten;
+        pointer-events: none;
+      }
+      .switch {
+        width: 120px;
+        height: 120px;
+        position: absolute;
+        transform: translate(-50%, -50%);
+        background: transparent;
+        border: none;
+        cursor: pointer;
+      }
+      .aqua {
+        top: 3%;
+        left: 31%;
+        --glow-color: 180deg 50% 70%;
+      }
+      .yellow {
+        top: 41%;
+        left: 77.25%;
+        --glow-color: 50deg 90% 85%;
+      }
+      .pink {
+        top: 61.75%;
+        left: 10.5%;
+        --glow-color: 310deg 90% 75%;
+      }
+      .glow {
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(
+          closest-side,
+          hsla(var(--glow-color) / 1) 0%,
+          hsla(var(--glow-color) / 0.987) 0%,
+          hsla(var(--glow-color) / 0.951) 0.2%,
+          hsla(var(--glow-color) / 0.896) 0.8%,
+          hsla(var(--glow-color) / 0.825) 1.9%,
+          hsla(var(--glow-color) / 0.741) 3.7%,
+          hsla(var(--glow-color) / 0.648) 6.4%,
+          hsla(var(--glow-color) / 0.55) 10.2%,
+          hsla(var(--glow-color) / 0.45) 15.2%,
+          hsla(var(--glow-color) / 0.352) 21.6%,
+          hsla(var(--glow-color) / 0.259) 29.6%,
+          hsla(var(--glow-color) / 0.167) 39.4%,
+          hsla(var(--glow-color) / 0.094) 51.2%,
+          hsla(var(--glow-color) / 0.049) 65.1%,
+          hsla(var(--glow-color) / 0.013) 81.3%,
+          hsla(var(--glow-color) / 0) 100%,
+          transparent
+        );
+        border-radius: 50%;
+        transform: scale(2.5);
+        filter: blur(5px);
+        /* replicating joyofreact's glow 1 to 1 had glitches for me in Safari,
+        this one looks ugly in code but has nicer light fallow and is ok in Safari*/
+      }
+
+      .light,
+      .glow {
+        opacity: 0;
+        transition: opacity 500ms;
+      }
+      .visible {
+        opacity: 1;
+        transition: opacity 0ms;
+      }
+    </style>
+    <script>
+      function switchLight(color) {
+        let glowEl = document
+          .querySelector(`.switch.${color} .glow`)
+          .classList.toggle("visible");
+        let lightLayerEl = document
+          .querySelector(`.light[data-light=${color}]`)
+          .classList.toggle("visible");
+      }
+    </script>
+  </head>
+  <body>
+    <div class="lil-planet">
+      <button class="switch aqua" onclick="switchLight('aqua')">
+        <div class="glow visible"></div>
+      </button>
+      <button class="switch yellow" onclick="switchLight('yellow')">
+        <div class="glow visible"></div>
+      </button>
+      <button class="switch pink" onclick="switchLight('pink')">
+        <div class="glow visible"></div>
+      </button>
+      <img class="mask" src="./mask.svg" />
+      <img class="light visible" src="./mascot-000@2x.jpg" />
+      <img class="light visible" data-light="pink" src="./mascot-001@2x.jpg" />
+      <img
+        class="light visible"
+        data-light="yellow"
+        src="./mascot-010@2x.jpg"
+      />
+      <img class="light visible" data-light="aqua" src="./mascot-100@2x.jpg" />
+    </div>
+  </body>
+</html>
